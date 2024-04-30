@@ -119,11 +119,11 @@ def dns_query(type, name, server):
 
     # Parse the response question section (same as query)
     response_question =
-    data[??:??+len(????)]  # The data variable starts immediately after the header section, so what is it's index? Note the two '??' '??' will be the same value as we start at a specific index and then go for the entire length of the binary data received.
+    data[12:12+len(question)]  # The data variable starts immediately after the header section, so what is it's index? Note the two '??' '??' will be the same value as we start at a specific index and then go for the entire length of the binary data received.
     assert response_question == question
 
     # Parse the response answer section
-    response_answer = data[??+len(
+    response_answer = data[12+len(
         question):]  # We would be looking at the same index position as before (after the header)
     offset = 0
     for _ in range(ANCOUNT):
@@ -150,20 +150,20 @@ def dns_query(type, name, server):
 
         # Parse the type, class, TTL, and RDLENGTH
         type, cls, ttl, rdlength = struct.unpack('!HHIH', response_answer[
-                                                          offset:offset +????])  # What is the offset value in bytes? Remember 'H' represent 2 bytes, and 'I' represents one byte, we declared '!HHIH'.
+                                                          offset:offset + 10])  # What is the offset value in bytes? Remember 'H' represent 2 bytes, and 'I' represents one byte, we declared '!HHIH'.
 
-        offset += ????  # Same value as just calculated
+        offset += 10  # Same value as just calculated
 
         # Parse the RDATA
         rdata = response_answer[offset:offset + rdlength]
         offset += rdlength
 
-        if type == ?????:  # Lookup Type value
+        if type == 1:  # Lookup Type value
             # A record (IPv4 address)
             ipv4 = socket.inet_ntop(socket.AF_INET, rdata)
             print(f'{name} has IPv4 address {ipv4}') \
                     return ipv4
-        elif type == ?????:  # Lookup Type value
+        elif type == 28:  # Lookup Type value
             # AAAA record (IPv6 address)
             ipv6 = socket.inet_ntop(socket.AF_INET6, rdata)
             print(f'{name} has IPv6 address {ipv6}')
