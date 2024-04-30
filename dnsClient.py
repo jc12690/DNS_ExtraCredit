@@ -2,7 +2,7 @@ import argparse
 import socket
 import struct
 
-
+#test
 # Useful resources to solve this lab:
 # 1. https://datatracker.ietf.org/doc/html/rfc1034
 # 2. https://datatracker.ietf.org/doc/html/rfc1035
